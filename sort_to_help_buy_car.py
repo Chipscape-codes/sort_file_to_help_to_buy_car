@@ -1,19 +1,16 @@
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 data = pd.read_csv("used_cars_data.csv")
 
-# Ensure numeric columns are correct
-data['Price'] = pd.to_numeric(data['Price'], errors='coerce')
-data['Kilometers_Driven'] = pd.to_numeric(data['Kilometers_Driven'], errors='coerce')
-
-print(data.head())
 print(data.shape)
-
+print(data['Location'].head())
 city = input("Enter the city name: ").strip().lower()
 data1 = data[data['Location'].str.lower() == city].reset_index(drop=True)
 
-c = float(input("Enter the car price max limit: "))
-j = float(input("Enter the car price to find the minimum: "))
+c = float(input("Enter the car price max limit in lakhs: "))
+j = float(input("Enter the car price to find the minimum in lakhs: "))
 d = []
 f = []
 kilometers = []
@@ -56,3 +53,13 @@ print(min_price_spec)
 min_km_spec = data1.loc[data1['Kilometers_Driven'] == min_km_row['Kilometers_Driven']]
 print("\nSpec of the car with lowest kilometers driven:")
 print(min_km_spec)
+
+# Price distribution
+sns.histplot(df['Price'], bins=50)
+plt.title("Price Distribution")
+plt.show()
+
+# Kilometers driven vs. Price
+sns.histplot(data=df, x=df['Kilometers_Driven'], y=df['Price'], hue=data1["Location"], bins=50, palette="colorblind")
+plt.title("Price vs Kilometers Driven")
+plt.show()
